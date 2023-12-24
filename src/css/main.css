@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* font-family: 'Encode Sans Condensed', sans-serif; */
+@import url('https://fonts.googleapis.com/css2?family=Encode+Sans+Condensed:wght@500&display=swap');
+
+::selection {
+  color: rgb(255, 162, 0);
+  background-color: transparent;
+}
+
+body {
+  font-family: 'Encode Sans Condensed', sans-serif;
+}
+
+.active {
+  background-color: rgb(0, 50, 50);
+}
