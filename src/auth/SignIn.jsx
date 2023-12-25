@@ -1,26 +1,59 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { IoIosArrowBack } from "react-icons/io";
 import { TbHomeMove } from "react-icons/tb";
+import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { allAuths } from "../config/firebase.config";
+import GoogleGithub from "../loginWithOthers/GoogleGithub";
+import { useState } from "react";
+import Loading from "../loading/Loading";
 
 const SignIn = () => {
+  const [err, setErr] = useState("");
+  const [emptyErr, setEmptyErr] = useState("");
+  const [signInWithEmailAndPassword, user, loading, error] =
+    useSignInWithEmailAndPassword(allAuths);
+  const location = useLocation();
   const navigate = useNavigate();
-  const goHomeFunc = () => {
-    navigate("/");
+  const from = location.state?.from?.pathname || "/";
+
+  if (loading) {
+    return <Loading></Loading>;
+  }
+
+  if(error){
+    // when password is invalid, he makes too many rerender.
+    console.log(error?.message)
+    return setErr(error?.message);
+  }
+
+  if (user) {
+    // allways he goes to home page.
+    navigate(from, { replace: true });
+  }
+
+  const handleSignInForm = async (e) => {
+    e.preventDefault();
+
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    if (email.trim() !== "" && password.trim() !== "") {
+      await signInWithEmailAndPassword(email, password);
+    } else {
+      setEmptyErr("Enter valid info");
+    }
   };
-  const goBackFunc = () => {
-    navigate(-1);
-  };
+
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+          <h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Sign in with your account
           </h2>
         </div>
 
         <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-5">
+          <form onSubmit={handleSignInForm} className="space-y-5">
             <div>
               <label
                 htmlFor="name"
@@ -91,10 +124,15 @@ const SignIn = () => {
               >
                 Sign in
               </button>
+              <p className="text-[14px] text-red-600 text-center">
+                {emptyErr || err}
+              </p>
             </div>
           </form>
 
-          <p className="mt-10 text-center text-sm text-gray-500">
+          <GoogleGithub />
+
+          <p className="mt-5 text-center text-sm text-gray-500">
             Haven't accont?{" "}
             <NavLink
               to="/signup"
@@ -105,15 +143,16 @@ const SignIn = () => {
             </NavLink>
           </p>
         </div>
+
         <div className="flex justify-center gap-3 pt-2">
           <button
-            onClick={goBackFunc}
+            onClick={() => navigate(-1)}
             className=" border border-green-600 text-green-900 py-1 px-4 rounded"
           >
             <IoIosArrowBack />
           </button>
           <button
-            onClick={goHomeFunc}
+            onClick={() => navigate("/")}
             className=" border border-green-600 text-green-900 py-1 px-4 rounded"
           >
             <TbHomeMove />

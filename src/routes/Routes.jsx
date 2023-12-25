@@ -8,9 +8,11 @@ import NotFound from "../notfound/NotFound";
 import Layouts from "../layout/Layouts";
 import Users from "../users/Users";
 import UserDetails from "../userDetails/UserDetails";
-import { createContext } from "react";
+import UserProfile from "../userProfile/UserProfile";
+import ContextFunction from "./../context/Context";
+import Projects from "./../Project/Projects";
+import Blogs from "../blog/Blogs";
 
-export const contextAPI = createContext();
 export const routes = createBrowserRouter([
   {
     element: <Layouts />,
@@ -29,6 +31,10 @@ export const routes = createBrowserRouter([
         path: "/about",
       },
       {
+        element: <Projects />,
+        path: "/project",
+      },
+      {
         element: <Users />,
         path: "/users",
         loader: () => fetch("https://jsonplaceholder.typicode.com/users"),
@@ -39,14 +45,24 @@ export const routes = createBrowserRouter([
         loader: ({ params }) =>
           fetch(`https://jsonplaceholder.typicode.com/users/${params.userId}`),
       },
+      {
+        element: <UserProfile />,
+        path: "/userProfile",
+      },
+      {
+        element: <Blogs />,
+        path: "/blog",
+      },
     ],
   },
   {
     element: <SignIn />,
+
     path: "/signin",
   },
   {
     element: <SignUp />,
+
     path: "/signup",
   },
 ]);

@@ -1,61 +1,19 @@
-import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa";
-import { googleFirebase } from "../config/firebase";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
-import {
-  getAuth,
-  signInWithPopup,
-  GoogleAuthProvider,
-  GithubAuthProvider,
-} from "firebase/auth";
-import { githubFirebase } from "../config/firebase";
-import Home from "./../pages/Home";
-import { toast } from "react-toastify";
+import { allAuths } from "../config/firebase.config";
+import { userContext } from "../context/Context";
+import Loading from "../loading/Loading";
+import GoogleGithub from "../loginWithOthers/GoogleGithub";
 
 const SignUp = () => {
-  // Google sign up:
-  const googleProvider = new GoogleAuthProvider();
-  const auth = getAuth(googleFirebase);
-  const [googleUser, setGoogleUser] = useState();
-  // console.log(googleUser?.photoURL);
-
-  const [createUserWithEmailAndPassword, user, loading, error] =
-    useCreateUserWithEmailAndPassword(auth, {sendEmailVerification: true});
-  const signinwithGoogle = () => {
-    signInWithPopup(auth, googleProvider)
-      .then((result) => {
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        const user = result.user;
-        setGoogleUser(user);
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        const email = error.customData.email;
-        const credential = GoogleAuthProvider.credentialFromError(error);
-      });
-  };
-
-  const githubProvider = new GithubAuthProvider();
-  const firebaseAuth = getAuth(githubFirebase);
-
-  const signinwithGithub = () => {
-    signInWithPopup(firebaseAuth, githubProvider)
-      .then((result) => {
-        const credential = GithubAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        const user = result.user;
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        const email = error.customData.email;
-        const credential = GithubAuthProvider.credentialFromError(error);
-      });
-  };
+  const navigate = useNavigate();
+  const [err, setErr] = useState();
+  const [sixDisit, setSixDigit] = useState("");
+  const [matchPassword, setMatchPassword] = useState("");
+  const { userData, setUserData, setEmailData } = useContext(userContext);
 
   const [inputs, setInputs] = useState({
     fname: "",
@@ -65,9 +23,6 @@ const SignUp = () => {
     conPassword: "",
   });
 
-  const [allInputValues, setAllInputValues] = useState([]);
-  console.log(allInputValues);
-
   const formChangeValue = (e) => {
     setInputs({
       ...inputs,
@@ -75,26 +30,49 @@ const SignUp = () => {
     });
   };
 
-  const handleSignUpForm = (e) => {
+  const [createUserWithEmailAndPassword, user, loading, error] =
+    useCreateUserWithEmailAndPassword(allAuths);
+  const [updateProfile, updating] = useState(allAuths);
+
+  // if(loading || updating){
+  //   return <Loading/>
+  // }
+  
+  if(error){
+    return setErr(error?.message);
+  }
+
+  if(user){
+    return navigate("/");
+  }
+
+  const clearInputs = () => {
+    inputs.fname = "";
+    inputs.lname = "";
+    inputs.email = "";
+    inputs.password = "";
+    inputs.conPassword = "";
+  };
+
+  const handleSignUpForm = async (e) => {
     e.preventDefault();
+
     if (inputs.password !== inputs.conPassword) {
-      console.log("password dosn't match!");
-      return;
+      return setMatchPassword("password doesn't match!");
+    } else if (inputs.password.length < 6) {
+      return setSixDigit("Password must be 6 digin or longer then");
     }
-    // setAllInputValues([...allInputValues, inputs]);
-    console.log(createUserWithEmailAndPassword(inputs.email, inputs.password));
+    // with email and password
+    await createUserWithEmailAndPassword(inputs.email, inputs.password);
+    await updateProfile({displayName: `${inputs.fname} ${inputs.lname}`});
+    clearInputs();
   };
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-5 lg:px-8">
-        <div className="flex justify-center text-green-600 text-2xl cursor-pointer gap-4">
-          <div onClick={signinwithGoogle}>
-            <FaGoogle />
-          </div>
-          <div onClick={signinwithGithub}>
-            <FaGithub />
-          </div>
-        </div>
+        
+        {/* Sign in with google or github */}
+        <GoogleGithub/>
 
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <h2 className="mt-1 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
@@ -182,6 +160,7 @@ const SignUp = () => {
                   autoComplete="current-password"
                   className="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6"
                 />
+                <p className="text-red-600 text-[13px]">{sixDisit}</p>
               </div>
               {/* confirm password */}
               <div className="flex items-center justify-between">
@@ -203,6 +182,7 @@ const SignUp = () => {
                   autoComplete="current-password"
                   className="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6"
                 />
+                <p className="text-red-700 text-[13px]">{matchPassword}</p>
               </div>
             </div>
 
@@ -213,6 +193,7 @@ const SignUp = () => {
               >
                 Sign up
               </button>
+              <p className="text-center text-red-700 text-[13px]">{err}</p>
             </div>
           </form>
 

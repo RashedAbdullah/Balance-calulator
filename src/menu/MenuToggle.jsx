@@ -6,8 +6,8 @@ import { IoCloseSharp } from "react-icons/io5";
 const Path = (props) => (
   <motion.path
     fill="transparent"
-    strokeWidth="3"
-    stroke="hsl(0, 0%, 18%)"
+    strokeWidth="2"
+    stroke="hsl(0, 0%, 250%)"
     strokeLinecap="round"
     {...props}
   />
