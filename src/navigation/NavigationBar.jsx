@@ -75,7 +75,7 @@ export default function NavigationBar() {
 
                 {/* Links */}
                 <Tab.Group as="div" className="mt-2">
-                  <div className="border-b border-gray-200">
+                  <div className="">
                     <Tab.List className="-mb-px flex space-x-8 px-4">
                       {navigation?.categories?.map((category) => (
                         <Tab
@@ -155,7 +155,7 @@ export default function NavigationBar() {
           aria-label="Top"
           className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
         >
-          <div className="border-b border-gray-200">
+          <div className="">
             <div className="flex h-16 items-center">
               {!open && (
                 <button
@@ -194,7 +194,7 @@ export default function NavigationBar() {
                                 open
                                   ? "border-indigo-600 text-white"
                                   : "border-transparent text-white hover:text-gray-400",
-                                "relative z-10 -mb-px flex items-center border-b-2 pt-px text-sm font-medium transition-colors duration-200 ease-out"
+                                "relative z-10 -mb-px flex items-center pt-px text-sm font-medium transition-colors duration-200 ease-out"
                               )}
                             >
                               {category.name}
