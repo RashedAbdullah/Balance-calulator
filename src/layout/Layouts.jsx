@@ -3,7 +3,6 @@ import Header from "../components/Header";
 import { Outlet, useNavigation } from "react-router-dom";
 import Footer from "../footer/Footer";
 import Loading from "../loading/Loading";
-import { ToastContainer } from "react-toastify"
 import NavigationBar from "../navigation/NavigationBar";
 import ScrollAnimation from "../scrollBar/ScrollAnimation";
 

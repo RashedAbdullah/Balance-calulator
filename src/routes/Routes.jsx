@@ -12,6 +12,7 @@ import UserProfile from "../userProfile/UserProfile";
 import ContextFunction from "./../context/Context";
 import Projects from "./../Project/Projects";
 import Blogs from "../blog/Blogs";
+import PrivateRoutes from "./PrivateRoutes";
 
 export const routes = createBrowserRouter([
   {
@@ -35,7 +36,11 @@ export const routes = createBrowserRouter([
         path: "/project",
       },
       {
-        element: <Users />,
+        element: (
+          <PrivateRoutes>
+            <Users />
+          </PrivateRoutes>
+        ),
         path: "/users",
         loader: () => fetch("https://jsonplaceholder.typicode.com/users"),
       },

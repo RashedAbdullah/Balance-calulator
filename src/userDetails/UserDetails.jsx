@@ -1,9 +1,11 @@
 import React from "react";
-import { useLoaderData, useNavigation } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
+import { FaBackwardStep } from "react-icons/fa6";
 
 const UserDetails = () => {
   const userData = useLoaderData();
-  const navigation = useNavigation();
+  console.log(userData)
+  const navigate = useNavigate();
 
   return (
     <div className=" h-[90vh] text-center bg-green-600 text-white p-10 ">
@@ -16,6 +18,11 @@ const UserDetails = () => {
       <p>City: {userData.address.city}</p>
       <p>Zipcode: {userData.address.zipcode}</p>
       <p>Website: {userData.website}</p>
+      <div>
+        <button onClick={()=>navigate(-1)} className="bg-green-700 px-12 py-1 rounded mt-5 hover:bg-green-800 transition">
+        <FaBackwardStep size="30px"/>
+        </button>
+      </div>
     </div>
   );
 };

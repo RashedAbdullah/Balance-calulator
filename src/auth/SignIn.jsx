@@ -4,8 +4,9 @@ import { TbHomeMove } from "react-icons/tb";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { allAuths } from "../config/firebase.config";
 import GoogleGithub from "../loginWithOthers/GoogleGithub";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Loading from "../loading/Loading";
+import Swal from "sweetalert2";
 
 const SignIn = () => {
   const [err, setErr] = useState("");
@@ -16,32 +17,51 @@ const SignIn = () => {
   const navigate = useNavigate();
   const from = location.state?.from?.pathname || "/";
 
-  if (loading) {
-    return <Loading></Loading>;
-  }
+  useEffect(() => {
+    const handleSignInEffect = async () => {
+      if (loading) {
+        return;
+      }
 
-  if(error){
-    // when password is invalid, he makes too many rerender.
-    console.log(error?.message)
-    return setErr(error?.message);
-  }
+      if (error) {
+        return Swal.fire({
+          title: error?.message,
+          icon: "error",
+        });
+      }
+    };
 
-  if (user) {
-    // allways he goes to home page.
-    navigate(from, { replace: true });
-  }
+    if (user) {
+      Swal.fire({
+        title: "Successfully Sign in done",
+        icon: "success",
+      }).then(() => {
+        navigate(from, { replace: true });
+      });
+    }
+    handleSignInEffect();
+  }, [user, loading, error, navigate, from]);
 
   const handleSignInForm = async (e) => {
     e.preventDefault();
 
     const email = e.target.email.value;
     const password = e.target.password.value;
+
     if (email.trim() !== "" && password.trim() !== "") {
       await signInWithEmailAndPassword(email, password);
     } else {
-      setEmptyErr("Enter valid info");
+      Swal.fire({
+        title: "Enter valid info",
+        text: "Empty input not allowed",
+        icon: "info",
+      });
     }
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <>
@@ -124,9 +144,6 @@ const SignIn = () => {
               >
                 Sign in
               </button>
-              <p className="text-[14px] text-red-600 text-center">
-                {emptyErr || err}
-              </p>
             </div>
           </form>
 

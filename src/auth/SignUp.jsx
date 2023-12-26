@@ -1,19 +1,18 @@
-import React, { useContext, useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { FaGoogle } from "react-icons/fa";
-import { FaGithub } from "react-icons/fa";
-import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import {
+  useCreateUserWithEmailAndPassword,
+  useUpdateProfile,
+} from "react-firebase-hooks/auth";
 import { allAuths } from "../config/firebase.config";
-import { userContext } from "../context/Context";
-import Loading from "../loading/Loading";
 import GoogleGithub from "../loginWithOthers/GoogleGithub";
+import Swal from "sweetalert2";
+import Loading from "../loading/Loading";
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const [err, setErr] = useState();
   const [sixDisit, setSixDigit] = useState("");
   const [matchPassword, setMatchPassword] = useState("");
-  const { userData, setUserData, setEmailData } = useContext(userContext);
 
   const [inputs, setInputs] = useState({
     fname: "",
@@ -31,20 +30,27 @@ const SignUp = () => {
   };
 
   const [createUserWithEmailAndPassword, user, loading, error] =
-    useCreateUserWithEmailAndPassword(allAuths);
-  const [updateProfile, updating] = useState(allAuths);
+    useCreateUserWithEmailAndPassword(allAuths, {
+      sendEmailVerification: true,
+    });
+  const [updateProfile, updating] = useUpdateProfile(allAuths);
 
-  // if(loading || updating){
-  //   return <Loading/>
-  // }
-  
-  if(error){
-    return setErr(error?.message);
+  if (error) {
+    return Swal.fire({
+      title: error?.message,
+      icon: "error",
+    });
   }
 
-  if(user){
-    return navigate("/");
-  }
+  useEffect(() => {
+    if (user) {
+      Swal.fire({
+        title: "Successfully sign up done",
+        icon: "success",
+      }).then(() => {});
+      return navigate("/");
+    }
+  }, [user]);
 
   const clearInputs = () => {
     inputs.fname = "";
@@ -64,15 +70,14 @@ const SignUp = () => {
     }
     // with email and password
     await createUserWithEmailAndPassword(inputs.email, inputs.password);
-    await updateProfile({displayName: `${inputs.fname} ${inputs.lname}`});
+    await updateProfile({ displayName: `${inputs.fname} ${inputs.lname}` });
     clearInputs();
   };
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-5 lg:px-8">
-        
         {/* Sign in with google or github */}
-        <GoogleGithub/>
+        <GoogleGithub />
 
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <h2 className="mt-1 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
@@ -193,7 +198,6 @@ const SignUp = () => {
               >
                 Sign up
               </button>
-              <p className="text-center text-red-700 text-[13px]">{err}</p>
             </div>
           </form>
 
