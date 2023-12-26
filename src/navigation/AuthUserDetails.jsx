@@ -6,6 +6,7 @@ import { FaUserCircle } from "react-icons/fa";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { signOut } from "firebase/auth";
+import { FaUserAstronaut } from "react-icons/fa";
 import Swal from "sweetalert2";
 
 const AuthUserDetails = () => {
