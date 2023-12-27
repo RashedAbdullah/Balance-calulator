@@ -5,6 +5,7 @@ import Footer from "../footer/Footer";
 import Loading from "../loading/Loading";
 import NavigationBar from "../navigation/NavigationBar";
 import ScrollAnimation from "../scrollBar/ScrollAnimation";
+import AppWithUI from "../mouse/Index";
 
 export const contextAPI = createContext();
 const Layouts = () => {
@@ -15,6 +16,7 @@ const Layouts = () => {
     <div>
       <contextAPI.Provider value={{ googleUser, setGoogleUser }}>
         <NavigationBar/>
+        <AppWithUI/>
         <ScrollAnimation/>
         <div>
           {loadingData.state === "loading" ? (

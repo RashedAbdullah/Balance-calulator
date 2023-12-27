@@ -1,4 +1,3 @@
-
 export const blogCategories = [
   {
     id: 5,
