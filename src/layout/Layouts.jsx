@@ -15,16 +15,9 @@ const Layouts = () => {
   return (
     <div>
       <contextAPI.Provider value={{ googleUser, setGoogleUser }}>
-        <NavigationBar/>
-        <AppWithUI/>
-        <ScrollAnimation/>
-        <div>
-          {loadingData.state === "loading" ? (
-            <Loading />
-          ) : (
-            <Outlet />
-          )}
-        </div>
+        <NavigationBar />
+        <ScrollAnimation />
+        <div>{loadingData.state === "loading" ? <Loading /> : <Outlet />}</div>
         <Footer />
       </contextAPI.Provider>
     </div>

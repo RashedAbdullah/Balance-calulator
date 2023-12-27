@@ -1,5 +1,6 @@
 import React from "react";
 import { useRouteError } from "react-router-dom";
+import AppWithUI from "../mouse/Index";
 
 const NotFound = () => {
   const err = useRouteError();
@@ -9,6 +10,7 @@ const NotFound = () => {
       {/* <h1>{err.status}</h1>
       <p>{err.statusText}</p>
       <p>{err.message}</p> */}
+      <AppWithUI />
       <img
         className="h-lvh bg-black"
         src="https://kfg6bckb.media.zestyio.com/yalantis-interactive-404.gif"

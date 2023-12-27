@@ -7,12 +7,8 @@ const Sreach = ({ setFilteredBlogs, setIsAllBlogs, isAllBlogs }) => {
     const filteredCategories = blogCategories.filter(
       (category) => category.id === index
     );
-    if (filteredCategories !== 1) {
-      setFilteredBlogs(filteredCategories.flatMap((value) => value.text));
-      setIsAllBlogs(false);
-    } else {
-      setIsAllBlogs(true);
-    }
+    setFilteredBlogs(filteredCategories.flatMap((value) => value.text));
+    setIsAllBlogs(false);
   };
 
   return (

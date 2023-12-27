@@ -8,7 +8,7 @@ export const blogCategories = [
         author: "Rashed Abdullah",
         date: "26/12/23",
         title: "Dive into the beauty and wisdom of Quranic verses",
-        para: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Unde dolor neque dicta ipsam quibusdam vel sunt nostrum...",
+        para: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae fugiat neque enim nemo inventore laborum aliquid culpa accusamus similique dolorum, lorem Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae fugiat neque enim nemo inventore laborum aliquid culpa accusamus similique dolorum, nesciunt ipsam maxime maiores provident? Magni nisi itaque amet aut.Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae fugiat neque enim nemo inventore laborum aliquid culpa accusamus similique dolorum, nesciunt ipsam maxime maiores provident? Magni nisi itaque amet aut.Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae fugiat neque enim nemo inventore laborum aliquid culpa accusamus similique dolorum, nesciunt ipsam maxime maiores provident? Magni nisi itaque amet aut. nesciunt ipsam maxime maiores provident? Magni nisi itaque amet aut. Lorem ipsum, dolor sit amet consectetur adipisicing elit. Unde dolor neque dicta ipsam quibusdam vel sunt nostrum...`,
       },
       {
         id: 7,

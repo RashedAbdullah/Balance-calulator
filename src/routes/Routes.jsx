@@ -13,6 +13,8 @@ import ContextFunction from "./../context/Context";
 import Projects from "./../Project/Projects";
 import Blogs from "../blog/Blogs";
 import PrivateRoutes from "./PrivateRoutes";
+import SingleBlog from "../blog/SingleBlog";
+import { blogCategories } from "../blogData/BlogCategories";
 
 export const routes = createBrowserRouter([
   {
@@ -57,6 +59,18 @@ export const routes = createBrowserRouter([
       {
         element: <Blogs />,
         path: "/blog",
+        loader: () =>
+          blogCategories.flatMap((category) =>
+            category.text.flatMap((item) => item)
+          ),
+      },
+      {
+        element: <SingleBlog />,
+        path: "/blog/:blogId",
+        loader: ({ params }) =>
+          `${blogCategories.flatMap((category) =>
+            category.text.flatMap((item) => item)
+          )}/${params.blogId}`,
       },
     ],
   },
